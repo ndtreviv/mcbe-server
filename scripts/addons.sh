@@ -49,16 +49,17 @@ move_pack() {
   PACK_TMP_PATH=$1
   PACK_UUID=$(cat "${PACK_TMP_PATH}/manifest.json" | jq -cr '.header.uuid')
   PACK_TYPE=$(cat "${PACK_TMP_PATH}/manifest.json" | jq -cr '.modules[].type')
-  if [[ "x${PACK_TYPE,,}" == "xdata" ]] || [[ "x${PACK_TYPE,,}" == "xresources" ]]; then
+  echo "Pack UUID: ${PACK_UUID} Pack Type: ${PACK_TYPE}"
+  if [[ "x${PACK_TYPE,,}" == "xdata" ]] || [[ "x${PACK_TYPE,,}" == "xresources" ]] || [[ "x${PACK_TYPE,,}" == "xskin_pack" ]]; then
     if [[ "x${PACK_TYPE,,}" == "xdata" ]]; then
       PACK_TYPE_FOLDER="behavior_packs"
-    elif [[ "x${PACK_TYPE,,}" == "xresources" ]]; then
+    elif [[ "x${PACK_TYPE,,}" == "xresources" ]] || [[ "x${PACK_TYPE,,}" == "xskin_pack" ]]; then
       PACK_TYPE_FOLDER="resource_packs"
     fi
     if [ ! -d "${ADDONS_PATH}/${PACK_TYPE_FOLDER}" ]; then
       echo "Creating directory ${ADDONS_PATH}/${PACK_TYPE_FOLDER}"
       mkdir $ADDONS_PATH/$PACK_TYPE_FOLDER
-    fi
+      fi
     mv "${PACK_TMP_PATH}" "${ADDONS_PATH}/${PACK_TYPE_FOLDER}/${PACK_UUID}"
   fi
 }
